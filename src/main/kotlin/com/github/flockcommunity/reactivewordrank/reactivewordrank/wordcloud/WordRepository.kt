@@ -10,8 +10,7 @@ class WordRepository {
 
     private val wordList: List<String> = listOf("Hello", "World")
 
-    fun returnWordList(): Flux<String> {
-
+    fun getWords(): Flux<String> {
         return Flux.interval(Duration.ofSeconds(2)).map { it -> getWord() }
     }
 
