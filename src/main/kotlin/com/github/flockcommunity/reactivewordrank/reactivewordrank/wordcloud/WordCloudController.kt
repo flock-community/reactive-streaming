@@ -1,13 +1,10 @@
 package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud
 
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.reactive.function.server.EntityResponse
 import reactor.core.publisher.Flux
-import java.time.Duration
 
 
 /**
@@ -23,12 +20,13 @@ import java.time.Duration
 @RestController
 @RequestMapping(path = ["/wordclouds"])
 
-class WordCloudController {
+class WordCloudController(private val wordRepository: WordRepository) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @GetMapping
-    fun helloWorld() : Flux<String> {
+    fun helloWorld(): Flux<String> {
         log.info("Got hello world request")
-        return Flux.fromIterable(listOf("1", "2","3")).delayElements(Duration.ofSeconds(2))
+        return wordRepository.returnWordList()
     }
 }
+
