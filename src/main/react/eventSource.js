@@ -1,14 +1,19 @@
-const evtSource = new EventSource("http://localhost:3000/wordclouds");
-evtSource.onmessage = function(event) {
-    const newElement = document.createElement("li");
-    const eventList = document.getElementById("list");
+function createEventSource(url, elementId) {
+    const wordDistributions = new EventSource(url);
+    wordDistributions.onmessage = function (event) {
+        const newElement = document.createElement("li");
+        const eventList = document.getElementById(elementId);
 
-    newElement.innerHTML = "message: " + event.data;
-    eventList.appendChild(newElement);
-};
+        newElement.innerHTML = "message: " + event.data;
+        eventList.appendChild(newElement);
+    };
 
-evtSource.onerror = function(event){
-    console.log("Received error");
-    console.error(event);
-    evtSource.close()
-};
+    wordDistributions.onerror = function (event) {
+        console.log("Received error");
+        console.error(event);
+        wordDistributions.close()
+    };
+}
+
+createEventSource("http://localhost:3000/wordclouds/word-distributions", "words");
+createEventSource("http://localhost:3000/wordclouds/words", "distributions");
