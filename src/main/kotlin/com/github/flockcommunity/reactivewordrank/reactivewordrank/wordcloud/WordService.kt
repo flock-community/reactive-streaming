@@ -3,16 +3,29 @@ package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 
+private const val ID: Long = 1
+
 @Service
 class WordService (private val wordRepository: WordRepository) {
 
-    fun getWords(): Flux<String> = wordRepository.getWords()
+    private val words = wordRepository.getWords().cache(10)
+    private val wordCounter = mutableMapOf<String, Long>()
+    private val wordDistributions = words
+                .map { word ->
+                    wordCounter.updateWith(word)
+                    WordCloud(ID, wordCounter)
+                }
+                .cache(1)
 
-    fun getWordDistribution(): Flux<WordCloud>{
 
-        return getWords().map { WordCloud(1, mutableMapOf("Hello" to 1L, "World" to 2L)) }
+    fun getWords(): Flux<String> = words
+    fun getWordDistribution(): Flux<WordCloud> = wordDistributions
+
+    private fun MutableMap<String, Long>.updateWith(word: String): MutableMap<String, Long> {
+        val currentCount = this[word] ?: 0
+        this[word] = currentCount + 1
+        return this
     }
 }
 
-
-data class WordCloud (val id: Long, val wordCounter: MutableMap<String, Long>)
+    data class WordCloud (val id: Long, val wordCounter: MutableMap<String, Long>)
