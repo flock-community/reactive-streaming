@@ -26,9 +26,7 @@ class WordRepository {
 
     fun getWords(): Flux<String> {
         log.info("I'm gonna generate words every 2 seconds")
-        return Flux.interval(Duration.ofSeconds(2)).map { getWord() }
+        return Flux.interval(Duration.ofSeconds(2)).map { dictionary[Random.nextInt(0, dictionary.size)] }
     }
-
-    private fun getWord(): String = dictionary[Random.nextInt(0, dictionary.size)]
 
 }

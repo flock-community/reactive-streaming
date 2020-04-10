@@ -24,14 +24,18 @@ class WordCloudController(private val wordService: WordService) {
 
     @GetMapping(path = ["/words"])
     fun getWords(): Flux<String> {
-        log.info("Got hello world request")
+        log.info("Got words request")
         return wordService.getWords()
+                .doOnError{log.warn("Words can no longer be exposed",it)}
+                .onErrorStop()
     }
 
     @GetMapping(path = ["/word-distributions"])
     fun getWordDistributions(): Flux<WordCloud> {
-        log.info("Got hello world request")
+        log.info("Got word distributions")
         return wordService.getWordDistribution()
+                .doOnError{log.warn("Word-distribution can no longer be exposed",it)}
+                .onErrorStop()
     }
 }
 
