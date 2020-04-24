@@ -24,6 +24,12 @@ class WordRepository {
             "不客气"
     )
 
+    private val wordPool: List<String>
+
+    init {
+        wordPool = List(50){ dictionary[Random.nextInt(0,dictionary.size)]}
+
+    }
     fun getWords(): Flux<String> {
         log.info("I'm gonna generate words every 2 seconds")
         return Flux.interval(Duration.ofSeconds(2)).map { dictionary[Random.nextInt(0, dictionary.size)] }

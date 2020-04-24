@@ -1,25 +1,37 @@
 package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 
-private const val ID: Long = 1
+private const val WORDCLOUD_ID: Long = 1
 
 @Service
-class WordService (private val wordRepository: WordRepository) {
+class WordService(private val wordRepository: WordRepository) {
 
-    private val words = wordRepository.getWords().cache(10)
+    private val log = LoggerFactory.getLogger(javaClass)
+    private val words = startWordRetrieval().cache(10)
+    private val wordDistributions = startWordDistributionDerivation().cache(1)
+
     private val wordCounter = mutableMapOf<String, Long>()
-    private val wordDistributions = words
-                .map { word ->
-                    wordCounter.updateWith(word)
-                    WordCloud(ID, wordCounter)
-                }
-                .cache(1)
-
 
     fun getWords(): Flux<String> = words
     fun getWordDistribution(): Flux<WordCloud> = wordDistributions
+
+
+    private fun startWordRetrieval(): Flux<String> =
+            wordRepository
+                    .getWords()
+                    .doOnError { log.info("Issue retrieving words. Starting over ... ") }
+                    .retry()
+
+    private fun startWordDistributionDerivation(): Flux<WordCloud> = words
+            .map {
+                wordCounter.updateWith(it)
+                WordCloud(WORDCLOUD_ID, wordCounter)
+            }
+            .doOnError { log.info("Issue updating wordDistribution. Trying again") }
+            .retry()
 
     private fun MutableMap<String, Long>.updateWith(word: String): MutableMap<String, Long> {
         val currentCount = this[word] ?: 0
@@ -28,4 +40,3 @@ class WordService (private val wordRepository: WordRepository) {
     }
 }
 
-    data class WordCloud (val id: Long, val wordCounter: MutableMap<String, Long>)
