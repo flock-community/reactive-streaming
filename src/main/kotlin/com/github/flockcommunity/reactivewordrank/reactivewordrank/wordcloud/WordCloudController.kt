@@ -47,5 +47,14 @@ class WordCloudController(private val wordService: WordService) {
                 .doOnError{log.warn("Word-distribution can no longer be exposed",it)}
                 .onErrorStop()
     }
+
+    @GetMapping(path = ["/word-distributions/most-recent"])
+    fun getMostRecentWordDistribution(): Mono<WordCloud> {
+        log.info("Got most recent word distributions")
+        return wordService.getWordDistribution()
+                .next()
+                .doOnError{log.warn("Most recent Word-distribution could  not be exposed",it)}
+                .onErrorStop()
+    }
 }
 
