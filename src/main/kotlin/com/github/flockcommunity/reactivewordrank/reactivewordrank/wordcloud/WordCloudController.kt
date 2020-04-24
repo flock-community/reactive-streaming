@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 
 
 /**
@@ -28,6 +30,14 @@ class WordCloudController(private val wordService: WordService) {
         return wordService.getWords()
                 .doOnError{log.warn("Words can no longer be exposed",it)}
                 .onErrorStop()
+    }
+
+    @GetMapping(path=["/words/most-recent"])
+    fun getMostRecentWord(): Mono<String> {
+        log.info("Got most-recent word request")
+        return wordService.getWords()
+                .next()
+                .doOnError { log.warn("Most recent word could not be exposed") }
     }
 
     @GetMapping(path = ["/word-distributions"])
