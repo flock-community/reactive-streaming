@@ -1,7 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {Grid, Typography} from '@material-ui/core';
+import WordTrend from "./WordTrend";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Word from "./Word";
+
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -26,7 +31,7 @@ function MainContent() {
         <main className={classes.fullWidth}>
             <div className={classes.toolbar} />
             <div className={classes.title}>
-                <Typography variant='h6'>Title</Typography>
+                <Typography variant='h6'>Trending words</Typography>
             </div>
             <div className={classes.content}>
                 <Typography paragraph>
@@ -34,6 +39,26 @@ function MainContent() {
                     nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem
                     felis nec erat
                 </Typography>
+                <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                        <Card>
+                           <CardHeader title="WordTrend"></CardHeader>
+                           <CardContent>
+                                <WordTrend />
+                           </CardContent>
+                        </Card>
+
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card>
+                            <CardHeader title="Latest words"></CardHeader>
+                            <CardContent>
+                                <Word />
+                            </CardContent>
+                        </Card>
+
+                    </Grid>
+                </Grid>
             </div>
         </main>
     );

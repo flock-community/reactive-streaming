@@ -14,7 +14,13 @@ const useStyles = makeStyles(theme => ({
 const App = () => {
     const classes = useStyles();
 
-    return (<div className={classes.root}> <TopMenu /> <SideMenu />  <MainContent />  <Footer /> </div>)
+    return (
+        <div className={classes.root}>
+            <TopMenu/>
+            <SideMenu/>
+            <MainContent/>
+            <Footer/>
+        </div>)
 
 };
 
