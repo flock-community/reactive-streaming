@@ -22,16 +22,17 @@ class WordService(private val wordRepository: WordRepository) {
     private fun startWordRetrieval(): Flux<String> =
             wordRepository
                     .getWords()
-                    .doOnError { log.info("Issue retrieving words. Starting over ... ") }
+                    .doOnError { log.info("Issue retrieving words. Starting over ... ", it) }
                     .retry()
 
     private fun startWordDistributionDerivation(): Flux<WordCloud> = words
+            .onErrorReturn("error")
             .map {
                 wordCounter.updateWith(it)
                 WordCloud(WORDCLOUD_ID, wordCounter)
             }
-            .doOnError { log.info("Issue updating wordDistribution. Trying again") }
-            .retry()
+            .doOnError { log.info("Issue updating wordDistribution. Trying again", it) }
+
 
     private fun MutableMap<String, Long>.updateWith(word: String): MutableMap<String, Long> {
         val currentCount = this[word] ?: 0
