@@ -68,11 +68,7 @@ const WordTrend = ({}) => {
             width={300}
             height={300}
         />
-        < />)
+        </>)
 };
-
-
-// createEventSource("/wordclouds/words", "words");
-// createEventSource("//wordclouds/word-distributions", "distributions");
 
 export default WordTrend
