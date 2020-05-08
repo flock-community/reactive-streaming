@@ -27,7 +27,7 @@ class WordRepository {
     private val wordPool: List<String>
 
     init {
-        wordPool = List(50){ dictionary[Random.nextInt(0,dictionary.size)]}
+        wordPool = List(dictionary.size){ dictionary[Random.nextInt(0,dictionary.size)]}
 
     }
     fun getWords(): Flux<String> {

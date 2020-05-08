@@ -28,9 +28,12 @@ class WordCloudController(private val wordService: WordService) {
         log.info("Got words request")
         return wordService.getWords()
                 .map(::WordResponse)
+                .onBackpressureDrop()
                 .doOnError{log.warn("Words can no longer be exposed",it)}
                 .onErrorStop()
                 .doOnComplete { log.info("Finished request") }
+                .doOnCancel { log.info("Cancelled request") }
+//                .doOnDiscard { log.info("Discarded request") }
     }
 
     @GetMapping(path=["/words/most-recent"])
@@ -43,25 +46,44 @@ class WordCloudController(private val wordService: WordService) {
     }
 
     @GetMapping(path = ["/word-distributions"])
-    fun getWordDistributions(): Flux<WordCloud> {
+    fun getWordDistributions(): Flux<WordCloudResponse> {
         log.info("Got word distributions")
         return wordService.getWordDistribution()
+                .map{it.toResponse()}
+                .onBackpressureDrop()
                 .doOnError{log.warn("Word-distribution can no longer be exposed",it)}
                 .onErrorStop()
                 .doOnComplete { log.info("Finished request") }
+                .doOnCancel { log.info("Cancelled request") }
+
     }
 
     @GetMapping(path = ["/word-distributions/most-recent"])
-    fun getMostRecentWordDistribution(): Mono<WordCloud> {
+    fun getMostRecentWordDistribution(): Mono<WordCloudResponse> {
         log.info("Got most recent word distributions")
         return wordService.getWordDistribution()
                 .next()
+                .map{it.toResponse()}
                 .doOnError{log.warn("Most recent Word-distribution could  not be exposed",it)}
                 .onErrorStop()
     }
+}
+
+private fun WordCloud.toResponse(): WordCloudResponse {
+    return WordCloudResponse(
+            id = id.toString(),
+            wordTotal = wordCounter.values.sum(),
+            wordDistribution = wordCounter.mapValues { (_, count) -> count.toDouble()}
+    )
 }
 
 class WordResponse(
         val word: String
 )
 
+class WordCloudResponse(
+        val id: String,
+        val wordTotal: Long,
+        val wordDistribution : Map<String, Double>
+
+)

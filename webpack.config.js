@@ -50,6 +50,7 @@ module.exports = {
 
   devServer: {
     historyApiFallback: true,
+    // http2: true,
     port: 3000,
     proxy: {
       "/wordclouds": "http://localhost:8080",

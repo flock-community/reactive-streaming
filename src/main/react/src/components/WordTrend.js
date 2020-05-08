@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {RadialChart} from "react-vis";
 import {createEventSource} from "../util"
+import Typography from "@material-ui/core/Typography";
 
-const radialData = [
-    {
-        angle: 0.1,
-        label: 'Flock.',
-        x: 'Flock.',
-        y: 0.1
-    }
-];
+const initialData = {
+    total: 0,
+    distribution: [{
+            angle: 0.1,
+            label: 'Flock.',
+            x: 'Flock.',
+            y: 0.1
+        }]
+};
+
 const WordTrend = ({}) => {
-    const [distribution, setDistribution] = useState(radialData);
+    const [trend, setTrend] = useState(initialData);
     const [eventSource, setEventSource] = useState(undefined);
 
 
@@ -26,7 +29,7 @@ const WordTrend = ({}) => {
 
 
     const mapToRadialChartFormat = (distributionDTO) => {
-        return Object.entries(distributionDTO.wordCounter).map(([word, value]) => {
+        return Object.entries(distributionDTO.wordDistribution).map(([word, value]) => {
             return {angle: value, label: word, x:word, y:value}
         });
     };
@@ -42,7 +45,10 @@ const WordTrend = ({}) => {
         let distributionDTO = JSON.parse(event.data);
         let mapToRadialChartFormat1 = mapToRadialChartFormat(distributionDTO);
         console.log(mapToRadialChartFormat1);
-        setDistribution(mapToRadialChartFormat1);
+        setTrend({
+            total: distributionDTO.wordTotal,
+            distribution: mapToRadialChartFormat1
+        });
     };
 
     const cancelWordDistributions = () => {
@@ -50,8 +56,10 @@ const WordTrend = ({}) => {
     };
 
     return (
+        <>
+        <Typography variant="h6" >out of {trend.total} words</Typography>
         <RadialChart
-            data={distribution}
+            data={trend.distribution}
             labelsStyle={{
                 fontFamily: "Roboto",
                 fontSize: 18
@@ -59,7 +67,8 @@ const WordTrend = ({}) => {
             showLabels
             width={300}
             height={300}
-        />)
+        />
+        < />)
 };
 
 
