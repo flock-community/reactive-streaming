@@ -6,6 +6,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Word from "./Word";
+import RSocketWord from "./RSocketWord";
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +41,9 @@ function MainContent() {
                     felis nec erat
                 </Typography>
                 <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Using eventStream</Typography>
+                    </Grid>
                     <Grid item xs={6}>
                         <Card>
                            <CardHeader title="WordTrend"></CardHeader>
@@ -54,6 +58,30 @@ function MainContent() {
                             <CardHeader title="Latest words"></CardHeader>
                             <CardContent>
                                 <Word />
+                            </CardContent>
+                        </Card>
+
+                    </Grid>
+
+
+                    {/* with rSocket */}
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Using rSocket</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card>
+                            <CardHeader title="WordTrend"></CardHeader>
+                            <CardContent>
+                                {/*<WordTrend />*/}
+                            </CardContent>
+                        </Card>
+
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card>
+                            <CardHeader title="Latest words"></CardHeader>
+                            <CardContent>
+                                <RSocketWord />
                             </CardContent>
                         </Card>
 

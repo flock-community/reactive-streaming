@@ -13,7 +13,7 @@ module.exports = {
       path.join(__dirname, "src/main/react")
   ],
   output: {
-    path: path.resolve(__dirname, "src/main/webapp")
+    path: path.resolve(__dirname, "static")
   },
 
   devtool: "cheap-module-source-map",
@@ -44,7 +44,7 @@ module.exports = {
       {from: "react/images", to: "images", context: "src/main" },
       // { from: "react/manifest.json", to: "webapp/", context: "src/main" },
       "src/main/react/manifest.json",
-      "src/main/react/eventSource.js"
+      // "src/main/react/eventSource.js"
     ])
   ],
 
