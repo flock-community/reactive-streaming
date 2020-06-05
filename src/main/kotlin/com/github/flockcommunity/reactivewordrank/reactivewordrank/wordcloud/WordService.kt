@@ -1,5 +1,6 @@
 package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud
 
+import com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.domain.WordCloud
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -7,7 +8,7 @@ import reactor.core.publisher.Flux
 private const val WORDCLOUD_ID: Long = 1
 
 @Service
-class WordService(private val wordRepository: WordRepository) {
+class WordService(private val repo: WordRepository) {
 
     private val log = LoggerFactory.getLogger(javaClass)
     private val words = startWordRetrieval().cache(10)
@@ -20,7 +21,7 @@ class WordService(private val wordRepository: WordRepository) {
 
 
     private fun startWordRetrieval(): Flux<String> =
-            wordRepository
+            repo
                     .getWords()
                     .doOnError { log.info("Issue retrieving words. Starting over ... ", it) }
                     .retry()

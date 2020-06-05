@@ -1,5 +1,9 @@
-package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud
+package com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.controller
 
+import com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.WordService
+import com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.controller.response.WordCloudResponse
+import com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.controller.response.WordResponse
+import com.github.flockcommunity.reactivewordrank.reactivewordrank.wordcloud.controller.response.toResponse
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,7 +28,7 @@ class WordCloudController(private val wordService: WordService) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @GetMapping(path = ["/words"])
-    fun getWords(): Flux<WordResponse> {
+    internal fun getWords(): Flux<WordResponse> {
         log.info("Got words request")
         return wordService.getWords()
                 .map(::WordResponse)
@@ -37,7 +41,7 @@ class WordCloudController(private val wordService: WordService) {
     }
 
     @GetMapping(path=["/words/most-recent"])
-    fun getMostRecentWord(): Mono<WordResponse> {
+    internal fun getMostRecentWord(): Mono<WordResponse> {
         log.info("Got most-recent word request")
         return wordService.getWords()
                 .next()
@@ -46,7 +50,7 @@ class WordCloudController(private val wordService: WordService) {
     }
 
     @GetMapping(path = ["/word-distributions"])
-    fun getWordDistributions(): Flux<WordCloudResponse> {
+    internal fun getWordDistributions(): Flux<WordCloudResponse> {
         log.info("Got word distributions")
         return wordService.getWordDistribution()
                 .map{it.toResponse()}
@@ -55,11 +59,10 @@ class WordCloudController(private val wordService: WordService) {
                 .onErrorStop()
                 .doOnComplete { log.info("Finished request") }
                 .doOnCancel { log.info("Cancelled request") }
-
     }
 
     @GetMapping(path = ["/word-distributions/most-recent"])
-    fun getMostRecentWordDistribution(): Mono<WordCloudResponse> {
+    internal fun getMostRecentWordDistribution(): Mono<WordCloudResponse> {
         log.info("Got most recent word distributions")
         return wordService.getWordDistribution()
                 .next()
@@ -69,21 +72,3 @@ class WordCloudController(private val wordService: WordService) {
     }
 }
 
-private fun WordCloud.toResponse(): WordCloudResponse {
-    return WordCloudResponse(
-            id = id.toString(),
-            wordTotal = wordCounter.values.sum(),
-            wordDistribution = wordCounter.mapValues { (_, count) -> count.toDouble()}
-    )
-}
-
-class WordResponse(
-        val word: String
-)
-
-class WordCloudResponse(
-        val id: String,
-        val wordTotal: Long,
-        val wordDistribution : Map<String, Double>
-
-)

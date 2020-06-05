@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Word from "./Word";
 import RSocketWord from "./RSocketWord";
+import RSocketWordTrend from "./RSocketWordTrend";
 
 
 const useStyles = makeStyles(theme => ({
@@ -72,7 +73,7 @@ function MainContent() {
                         <Card>
                             <CardHeader title="WordTrend"></CardHeader>
                             <CardContent>
-                                {/*<WordTrend />*/}
+                                <RSocketWordTrend />
                             </CardContent>
                         </Card>
 
