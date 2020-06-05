@@ -1,0 +1,5 @@
+
+httpClients.hackernews:
+    baseUrl: http://api.hnstream.com/
+    connectTimeout: 100ms
+    readTimeout: 60s
