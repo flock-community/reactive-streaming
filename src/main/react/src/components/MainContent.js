@@ -42,27 +42,27 @@ function MainContent() {
                     felis nec erat
                 </Typography>
                 <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <Typography variant="h6">Using eventStream</Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Card>
-                           <CardHeader title="WordTrend"></CardHeader>
-                           <CardContent>
-                                <WordTrend />
-                           </CardContent>
-                        </Card>
+                    {/*<Grid item xs={12}>*/}
+                    {/*    <Typography variant="h6">Using eventStream</Typography>*/}
+                    {/*</Grid>*/}
+                    {/*<Grid item xs={6}>*/}
+                    {/*    <Card>*/}
+                    {/*       <CardHeader title="WordTrend"></CardHeader>*/}
+                    {/*       <CardContent>*/}
+                    {/*            <WordTrend />*/}
+                    {/*       </CardContent>*/}
+                    {/*    </Card>*/}
 
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Card>
-                            <CardHeader title="Latest words"></CardHeader>
-                            <CardContent>
-                                <Word />
-                            </CardContent>
-                        </Card>
+                    {/*</Grid>*/}
+                    {/*<Grid item xs={6}>*/}
+                    {/*    <Card>*/}
+                    {/*        <CardHeader title="Latest words"></CardHeader>*/}
+                    {/*        <CardContent>*/}
+                    {/*            <Word />*/}
+                    {/*        </CardContent>*/}
+                    {/*    </Card>*/}
 
-                    </Grid>
+                    {/*</Grid>*/}
 
 
                     {/* with rSocket */}

@@ -39,7 +39,7 @@ const Word = ({}) => {
     };
 
     const response = () =>
-        latestWords.map((value, idx) =>
+        latestWords.reverse().map((value, idx) =>
             (
                 <Grid key={idx} item xs={12}>
                     <Typography variant="h6">{value}</Typography>

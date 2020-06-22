@@ -12,16 +12,15 @@ class WordRepository {
     private val log = LoggerFactory.getLogger(javaClass)
 
     private val dictionary: List<String> = listOf(
-            "Poooo hee",
-            "Flock.",
+            "Java",
+            "NodeJs",
             "Software",
-            "Skillz",
-            "Yo mamma",
-            "Borrel",
-            "🍺 Beer",
+            "C++",
+            "Python",
+            "Typescript",
+            "Deno",
             "🕶 privacy",
-            "hackerbois",
-            "不客气"
+            "hackerbois"
     )
 
     private val wordPool: List<String>
