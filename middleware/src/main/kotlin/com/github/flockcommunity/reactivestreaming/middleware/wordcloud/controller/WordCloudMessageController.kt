@@ -1,6 +1,6 @@
 package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller
 
-import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.WordService
+import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.service.WordService
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordCloudResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.toResponse
@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux
 
 
 @Controller
-class WordCloudMessageController(private val service: WordService) {
+internal class WordCloudMessageController(private val service: WordService) {
 
     private val log = getLogger(javaClass)
 

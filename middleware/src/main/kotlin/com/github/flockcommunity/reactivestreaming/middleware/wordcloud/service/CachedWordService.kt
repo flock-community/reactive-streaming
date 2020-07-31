@@ -1,14 +1,17 @@
-package com.github.flockcommunity.reactivestreaming.middleware.wordcloud
+package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.service
 
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.domain.WordCloud
+import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.repository.WordRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 
-private const val WORDCLOUD_ID: Long = 1
 
 @Service
-class WordService(private val repo: WordRepository) {
+internal class WordService(private val repo: WordRepository) {
+    companion object{
+        private const  val WORDCLOUD_ID: Long = 1
+    }
 
     private val log = LoggerFactory.getLogger(javaClass)
     private val words = startWordRetrieval().cache(10)
@@ -18,6 +21,7 @@ class WordService(private val repo: WordRepository) {
 
     fun getWords(): Flux<String> = words
     fun getWordDistribution(): Flux<WordCloud> = wordDistributions
+
 
 
     private fun startWordRetrieval(): Flux<String> =

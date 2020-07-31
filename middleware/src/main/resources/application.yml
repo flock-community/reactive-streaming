@@ -1,6 +1,20 @@
 spring:
   rsocket:
     server:
-      port: 8080
+      port: 9000
       mapping-path: /ws
       transport: websocket
+
+app.wordgeneration:
+  interval: 5s
+  words:
+    - "Java"
+    - "NodeJs",
+    - "Software",
+    - "C++",
+    - "Python",
+    - "Typescript",
+    - "Deno",
+    - "🕶 privacy",
+    - "hackerbois"
+ -
