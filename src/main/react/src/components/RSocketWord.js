@@ -71,8 +71,8 @@ const RSocketWord = ({}) => {
 
     const requestWord = () => {
         console.log("Requesting");
-        subscription.request(wordRequestBatchSize);
         setToReceiveCount(toReceiveCount + wordRequestBatchSize)
+        subscription.request(wordRequestBatchSize);
     };
 
     const changeWordRequestBatch = (event) => {

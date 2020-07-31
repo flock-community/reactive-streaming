@@ -30,8 +30,8 @@ class WordRepository {
 
     }
     fun getWords(): Flux<String> {
-        log.info("I'm gonna generate words every 2 seconds")
-        return Flux.interval(Duration.ofSeconds(2)).map { wordPool[Random.nextInt(0, wordPool.size)] }
+        log.info("I'm gonna generate words every 0.2 seconds")
+        return Flux.interval(Duration.ofMillis(200)).map { wordPool[Random.nextInt(0, wordPool.size)] }
     }
 
 }
