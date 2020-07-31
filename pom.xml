@@ -17,6 +17,9 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<kotlin.version>1.3.71</kotlin.version>
+		<!-- installed node/npm version: lts/carbon -->
+		<node.version>v12.18.0</node.version>
+		<npm.version>6.14.4</npm.version>
 	</properties>
 
 	<dependencies>
@@ -94,6 +97,118 @@
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeGroupIds>com.github.flockcommunity.reactivewordrank</includeGroupIds>
+							<includes>**/*.js</includes>
+							<outputDirectory>${project.build.directory}/react</outputDirectory>
+							<useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+							<stripVersion>true</stripVersion>
+							<stripClassifier>true</stripClassifier>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+							<installDirectory>${project.basedir}</installDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm ci</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>ci</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+<!--			<plugin>-->
+<!--				<artifactId>maven-resources-plugin</artifactId>-->
+<!--				<version>3.0.1</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>position-react-build</id>-->
+<!--						<goals>-->
+<!--							<goal>copy-resources</goal>-->
+<!--						</goals>-->
+<!--						<phase>prepare-package</phase>-->
+<!--						<configuration>-->
+<!--							<outputDirectory>${project.build.directory}/appengine-staging/static</outputDirectory>-->
+<!--							<resources>-->
+<!--								<resource>-->
+<!--									<directory>src/main/webapp</directory>-->
+<!--									<filtering>false</filtering>-->
+<!--								</resource>-->
+<!--							</resources>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>testCompile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

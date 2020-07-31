@@ -12,16 +12,15 @@ class WordRepository {
     private val log = LoggerFactory.getLogger(javaClass)
 
     private val dictionary: List<String> = listOf(
-            "Poooo hee",
-            "Flock.",
+            "Java",
+            "NodeJs",
             "Software",
-            "Skillz",
-            "Yo mamma",
-            "Borrel",
-            "🍺 Beer",
+            "C++",
+            "Python",
+            "Typescript",
+            "Deno",
             "🕶 privacy",
-            "hackerbois",
-            "不客气"
+            "hackerbois"
     )
 
     private val wordPool: List<String>
@@ -31,8 +30,8 @@ class WordRepository {
 
     }
     fun getWords(): Flux<String> {
-        log.info("I'm gonna generate words every 2 seconds")
-        return Flux.interval(Duration.ofSeconds(2)).map { wordPool[Random.nextInt(0, wordPool.size)] }
+        log.info("I'm gonna generate words every 0.2 seconds")
+        return Flux.interval(Duration.ofMillis(200)).map { wordPool[Random.nextInt(0, wordPool.size)] }
     }
 
 }

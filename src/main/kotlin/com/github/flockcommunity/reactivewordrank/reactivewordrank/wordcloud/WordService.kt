@@ -17,7 +17,7 @@ class WordService(private val repo: WordRepository) {
     private val wordCounter = mutableMapOf<String, Long>()
 
     fun getWords(): Flux<String> = words
-    fun getWordDistribution(): Flux<WordCloud> = wordDistributions
+    fun getWordDistribution(): Flux<WordCloud> =Flux.empty() // wordDistributions
 
 
     private fun startWordRetrieval(): Flux<String> =
