@@ -9,7 +9,7 @@ import {Input} from "@material-ui/core";
 let client = undefined;
 const RSocketWord = ({}) => {
     const [latestWords, setLatestWords] = useState([]);
-    const [wordRequestBatchSize, setwordRequestBatch] = useState(1);
+    const [wordRequestBatchSize, setwordRequestBatch] = useState(10);
     const [subscription, setSubscription] = useState(undefined);
     const [toReceiveCount, setToReceiveCount] = useState(0);
 
@@ -23,7 +23,7 @@ const RSocketWord = ({}) => {
     },[]);
 
     useEffect(()=>{
-        console.log("Update toReceiveCount: ", toReceiveCount)
+        console.debug("Update toReceiveCount: ", toReceiveCount)
     },[toReceiveCount]);
 
     const subscribeToWords = () => {
@@ -46,21 +46,24 @@ const RSocketWord = ({}) => {
     };
 
 
-    function addWordToList(word) {
-        latestWords.push(word);
-        if (latestWords.length > 10) {
-            latestWords.shift()
-        }
-        setLatestWords(new Array(...latestWords))
+    const addWordToList = (word) => {
+        setLatestWords(prevState => {
+            const newArray = [word].concat(prevState)
+            if (newArray.length > 15) {
+                newArray.pop()
+            }
+
+            return newArray
+        })
+
     }
 
     const cancelWords = () => {
         client.close();
-        console.log("Trying to cancel words (NOT IMPLEMENTED YET")
     };
 
     const response = () =>
-        latestWords.reverse().map((value, idx) =>
+        latestWords.map((value, idx) =>
             (
                 <Grid key={idx} item xs={12}>
                     <Typography variant="h6">{idx+1} - {value}</Typography>
@@ -84,7 +87,7 @@ const RSocketWord = ({}) => {
         <>
             <Grid container spacing={5}>
                 <Grid item  xs={4}>
-                    <Input onChange={changeWordRequestBatch}  defaultValue="1" type="number" />
+                    <Input onChange={changeWordRequestBatch}  defaultValue={wordRequestBatchSize} type="number" />
                 </Grid>
                 <Grid item xs={4} >
                     <Button variant="contained" onClick={requestWord}>Request {wordRequestBatchSize} word(s)</Button>
