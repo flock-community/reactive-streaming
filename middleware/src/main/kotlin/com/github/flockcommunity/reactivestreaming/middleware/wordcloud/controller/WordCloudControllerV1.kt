@@ -1,6 +1,6 @@
 package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller
 
-import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.service.WordService
+import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.service.SimpleWordService
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordCloudResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.toResponse
@@ -13,8 +13,8 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping(path = ["/wordclouds"])
-internal class WordCloudController(private val wordService: WordService) {
+@RequestMapping(path = ["/wordclouds/v1"])
+internal class WordCloudControllerV1(private val wordService: SimpleWordService) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @GetMapping(path = ["/words"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -22,12 +22,10 @@ internal class WordCloudController(private val wordService: WordService) {
         log.info("Got words request")
         return wordService.getWords()
                 .map(::WordResponse)
-                .onBackpressureDrop()
+                .log()
                 .doOnError{log.warn("Words can no longer be exposed",it)}
-                .onErrorStop()
                 .doOnComplete { log.info("Finished request") }
                 .doOnCancel { log.info("Cancelled request") }
-//                .doOnDiscard { log.info("Discarded request") }
     }
 
     @GetMapping(path=["/words/most-recent"])

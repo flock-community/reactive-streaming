@@ -1,11 +1,13 @@
 package com.github.flockcommunity.reactivestreaming.middleware
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class ReactiveWordRankApplication
+@ConfigurationPropertiesScan
+class ReactiveStreamingMiddlewareApplication
 
 fun main(args: Array<String>) {
-	runApplication<ReactiveWordRankApplication>(*args)
+	runApplication<ReactiveStreamingMiddlewareApplication>(*args)
 }

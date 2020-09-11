@@ -73,7 +73,7 @@ function MainContent() {
                         <Card>
                             <CardHeader title="WordTrend"></CardHeader>
                             <CardContent>
-                                <RSocketWordTrend />
+                                {/*<RSocketWordTrend />*/}
                             </CardContent>
                         </Card>
 
@@ -82,7 +82,7 @@ function MainContent() {
                         <Card>
                             <CardHeader title="Latest words"></CardHeader>
                             <CardContent>
-                                {/*<RSocketWord />*/}
+                                <RSocketWord />
                             </CardContent>
                         </Card>
 

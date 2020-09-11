@@ -1,6 +1,6 @@
 package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller
 
-import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.WordService
+import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.service.WordService
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordCloudResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.WordResponse
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response.toResponse
@@ -9,11 +9,12 @@ import org.slf4j.LoggerFactory.getLogger
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.stereotype.Controller
 import reactor.core.Scannable
+import reactor.core.publisher.BufferOverflowStrategy
 import reactor.core.publisher.Flux
 
 
 @Controller
-class WordCloudMessageController(private val service: WordService) {
+internal class WordCloudMessageController(private val service: WordService) {
 
     private val log = getLogger(javaClass)
 
@@ -31,7 +32,9 @@ class WordCloudMessageController(private val service: WordService) {
                 .doOnNext { it ->
                     log.info("QueueSize: ${Scannable.from(subscription).scan(Scannable.Attr.BUFFERED)}")
                 }
-                .onBackpressureBuffer()
+//                .onBackpressureBuffer()
+//                .onBackpressureLatest()
+                .onBackpressureBuffer(1000, BufferOverflowStrategy.DROP_OLDEST)
                 .doOnSubscribe { subscription = it }
                 .log()
                 .doOnNext{ log.info("Exposing '$it' through with rSocket")}

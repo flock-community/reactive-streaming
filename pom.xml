@@ -10,4 +10,7 @@
 	<name>reactive-streaming</name>
 	<description>Experimentation app to show off reactive programming, streaming api for front- and back-end</description>
 
+	<modules>
+		<module>middleware</module>
+	</modules>
 </project>
