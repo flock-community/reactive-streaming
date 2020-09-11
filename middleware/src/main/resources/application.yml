@@ -5,8 +5,10 @@ spring:
       mapping-path: /ws
       transport: websocket
 
+
 app.wordgeneration:
-  interval: 5s
+  use-upstream: false
+  interval: 500ms
   words:
     - "Java"
     - "NodeJs",

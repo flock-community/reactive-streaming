@@ -14,7 +14,7 @@ internal class WordService(private val repo: WordRepository) {
     }
 
     private val log = LoggerFactory.getLogger(javaClass)
-    private val words = startWordRetrieval().cache(10)
+    private val words = startWordRetrieval().cache(2).also{it.subscribe()}
     private val wordDistributions = startWordDistributionDerivation().cache(1)
 
     private val wordCounter = mutableMapOf<String, Long>()
@@ -28,7 +28,7 @@ internal class WordService(private val repo: WordRepository) {
             repo
                     .getWords()
                     .doOnError { log.info("Issue retrieving words. Starting over ... ", it) }
-                    .retry()
+//                    .retry()
 
     private fun startWordDistributionDerivation(): Flux<WordCloud> = words
             .onErrorReturn("error")

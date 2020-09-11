@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory.getLogger
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.stereotype.Controller
 import reactor.core.Scannable
+import reactor.core.publisher.BufferOverflowStrategy
 import reactor.core.publisher.Flux
 
 
@@ -31,7 +32,9 @@ internal class WordCloudMessageController(private val service: WordService) {
                 .doOnNext { it ->
                     log.info("QueueSize: ${Scannable.from(subscription).scan(Scannable.Attr.BUFFERED)}")
                 }
-                .onBackpressureBuffer()
+//                .onBackpressureBuffer()
+//                .onBackpressureLatest()
+                .onBackpressureBuffer(1000, BufferOverflowStrategy.DROP_OLDEST)
                 .doOnSubscribe { subscription = it }
                 .log()
                 .doOnNext{ log.info("Exposing '$it' through with rSocket")}
