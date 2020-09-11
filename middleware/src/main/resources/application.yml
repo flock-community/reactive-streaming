@@ -11,12 +11,11 @@ app.wordgeneration:
   interval: 500ms
   words:
     - "Java"
-    - "NodeJs",
-    - "Software",
-    - "C++",
-    - "Python",
-    - "Typescript",
-    - "Deno",
-    - "🕶 privacy",
+    - "NodeJs"
+    - "Software"
+    - "C++"
+    - "Python"
+    - "Typescript"
+    - "Deno"
+    - "🕶 privacy"
     - "hackerbois"
- -
