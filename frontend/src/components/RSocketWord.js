@@ -20,15 +20,14 @@ const RSocketWord = ({}) => {
         return () => {
             cancelWords();
         }
-    },[]);
+    }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         console.debug("Update toReceiveCount: ", toReceiveCount)
-    },[toReceiveCount]);
+    }, [toReceiveCount]);
 
     const subscribeToWords = () => {
-        client =createRSocketClient();
-
+        client = createRSocketClient();
 
         let onNext = payload => {
             console.log(payload.data);
@@ -37,9 +36,9 @@ const RSocketWord = ({}) => {
         };
 
         let onSubscribe = sub => {
-                setSubscription(sub);
-                setToReceiveCount((count) => count + wordRequestBatchSize);
-                sub.request(wordRequestBatchSize);
+            setSubscription(sub);
+            setToReceiveCount((count) => count + wordRequestBatchSize);
+            sub.request(wordRequestBatchSize);
         };
 
         connectAndSubscribeToEndpoint(client, "words", onNext, onSubscribe)
@@ -66,7 +65,7 @@ const RSocketWord = ({}) => {
         latestWords.map((value, idx) =>
             (
                 <Grid key={idx} item xs={12}>
-                    <Typography variant="h6">{idx+1} - {value}</Typography>
+                    <Typography variant="h6">{idx + 1} - {value}</Typography>
                 </Grid>
             )
         );
@@ -86,18 +85,18 @@ const RSocketWord = ({}) => {
     return (
         <>
             <Grid container spacing={5}>
-                <Grid item  xs={4}>
-                    <Input onChange={changeWordRequestBatch}  defaultValue={wordRequestBatchSize} type="number" />
+                <Grid item xs={4}>
+                    <Input onChange={changeWordRequestBatch} defaultValue={wordRequestBatchSize} type="number"/>
                 </Grid>
-                <Grid item xs={4} >
+                <Grid item xs={4}>
                     <Button variant="contained" onClick={requestWord}>Request {wordRequestBatchSize} word(s)</Button>
                 </Grid>
-                <Grid item  xs={4}>
+                <Grid item xs={4}>
                     <Typography variant="h6">Waiting for # words:</Typography>
                     <Typography align="center" variant="h6">{toReceiveCount} </Typography>
                 </Grid>
                 <Grid item container spacing={2}>
-                {response()}
+                    {response()}
                 </Grid>
             </Grid>
         </>
