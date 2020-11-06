@@ -13,15 +13,15 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping(path = ["/wordclouds"])
-internal class WordCloudController(private val wordService: WordService) {
+@RequestMapping(path = ["/wordclouds/v2"])
+internal class WordCloudControllerV2(private val wordService: WordService) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @GetMapping(path = ["/words"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     internal fun getWords(): Flux<WordResponse> {
         log.info("Got words request")
         return wordService.getWords()
-                .map(::WordResponse)
+                .map{it.externalise()}
                 .onBackpressureDrop()
                 .doOnError{log.warn("Words can no longer be exposed",it)}
                 .onErrorStop()
@@ -35,7 +35,7 @@ internal class WordCloudController(private val wordService: WordService) {
         log.info("Got most-recent word request")
         return wordService.getWords()
                 .next()
-                .map(::WordResponse)
+                .map{it.externalise()}
                 .doOnError { log.warn("Most recent word could not be exposed") }
     }
 

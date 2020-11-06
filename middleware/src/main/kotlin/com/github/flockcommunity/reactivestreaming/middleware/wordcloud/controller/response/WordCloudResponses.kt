@@ -1,6 +1,7 @@
 package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.controller.response
 
-internal class WordResponse(
+class WordResponse(
+        val index: Long,
         val word: String
 )
 

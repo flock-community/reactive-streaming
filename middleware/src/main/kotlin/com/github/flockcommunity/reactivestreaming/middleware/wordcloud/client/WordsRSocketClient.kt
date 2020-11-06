@@ -51,35 +51,34 @@ class ClientConfiguration {
 
     private val log = getLogger(javaClass)
 
-//    val rSocket: Mono<RSocket> =
-//            RSocketFactory
-//                    .connect()
-//                    .dataMimeType(MimeTypeUtils.APPLICATION_JSON_VALUE)
-//                    .metadataMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.string)
-//                    .frameDecoder(PayloadDecoder.ZERO_COPY)
-//                    .transport(TcpClientTransport.create(
-//                            "192.168.1.54",
-//                            8083
-//                    ))
-//                    .start()
-//                    .log()
-//                    .retryBackoff(100, Duration.ofSeconds(1), Duration.ofSeconds(180))
-//
-
-//    @Bean
-//    fun rSocketRequester(rSocketStrategies: RSocketStrategies): Mono<RSocketRequester> =
-//            rSocket.map {
-//                RSocketRequester.wrap(
-//                        it,
-//                        MimeTypeUtils.APPLICATION_JSON,
-//                        MimeTypeUtils.parseMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.string),
-//                        rSocketStrategies
-//                )
-//            }
-//            .cache().also{it.subscribe()}
+    val rSocket: Mono<RSocket> =
+            RSocketFactory
+                    .connect()
+                    .dataMimeType(MimeTypeUtils.APPLICATION_JSON_VALUE)
+                    .metadataMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.string)
+                    .frameDecoder(PayloadDecoder.ZERO_COPY)
+                    .transport(TcpClientTransport.create(
+                            "127.0.0.1",
+                            8083
+                    ))
+                    .start()
+                    .log()
+                    .retryBackoff(100, Duration.ofSeconds(1), Duration.ofSeconds(180))
 
     @Bean
-    fun rSocketRequester(rSocketStrategies: RSocketStrategies): Mono<RSocketRequester> = Mono.empty()
+    fun rSocketRequester(rSocketStrategies: RSocketStrategies): Mono<RSocketRequester> =
+            rSocket.map {
+                RSocketRequester.wrap(
+                        it,
+                        MimeTypeUtils.APPLICATION_JSON,
+                        MimeTypeUtils.parseMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.string),
+                        rSocketStrategies
+                )
+            }
+            .cache().also{it.subscribe()}
+
+//    @Bean
+//    fun rSocketRequester(rSocketStrategies: RSocketStrategies): Mono<RSocketRequester> = Mono.empty()
 
 
     @Bean

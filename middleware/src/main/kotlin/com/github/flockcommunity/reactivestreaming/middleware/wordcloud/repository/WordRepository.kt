@@ -1,6 +1,7 @@
 package com.github.flockcommunity.reactivestreaming.middleware.wordcloud.repository
 
 import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.client.WordsRSocketClient
+import com.github.flockcommunity.reactivestreaming.middleware.wordcloud.domain.Word
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
@@ -18,7 +19,6 @@ data class WordGenerationConfig(
         val useUpstream: Boolean = true
 )
 
-
 @Repository
 internal class WordRepository(
         private val client: WordsRSocketClient,
@@ -35,18 +35,23 @@ internal class WordRepository(
     }
 
 
-    fun getWords(): Flux<String> = if (config.useUpstream) getWordsUpstream() else getWordsInternal()
+    fun getWords(): Flux<Word> = if (config.useUpstream) getWordsUpstream() else getWordsInternal()
 
-    private fun getWordsUpstream(): Flux<String> {
+    private fun getWordsUpstream(): Flux<Word> {
         log.info("Requesting words upstream")
+        var idx = 0L;
         return client.getWords()
-                .map{ it.word }
+                .map { Word(idx = idx++, word = it.word) }
     }
 
-    private fun getWordsInternal(): Flux<String> {
+    private fun getWordsInternal(): Flux<Word> {
 
         log.info("I'm gonna generate words with interval ${config.interval}")
+        var idx = 0L;
         return Flux.interval(config.interval).map { wordPool[Random.nextInt(0, wordPool.size)] }
+                .map {
+                    Word(idx = idx++, word = it)
+                }
     }
 
 

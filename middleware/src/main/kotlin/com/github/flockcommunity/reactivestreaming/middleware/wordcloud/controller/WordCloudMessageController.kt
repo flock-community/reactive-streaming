@@ -33,19 +33,19 @@ internal class WordCloudMessageController(private val service: WordService) {
                     log.info("QueueSize: ${Scannable.from(subscription).scan(Scannable.Attr.BUFFERED)}")
                 }
 //                .onBackpressureBuffer()
-//                .onBackpressureLatest()
-                .onBackpressureBuffer(1000, BufferOverflowStrategy.DROP_OLDEST)
+                .onBackpressureLatest()
+//                .onBackpressureBuffer(1000, BufferOverflowStrategy.DROP_OLDEST)
                 .doOnSubscribe { subscription = it }
                 .log()
                 .doOnNext{ log.info("Exposing '$it' through with rSocket")}
-                .map(::WordResponse)
+                .map{it.externalise()}
     }
 
     @MessageMapping("word-distributions")
     internal fun getWordDistributions(): Flux<WordCloudResponse> {
         log.info("Messaging word-distributions request")
         return service.getWordDistribution()
-                .onBackpressureBuffer()
+                .onBackpressureLatest()
                 .doOnNext{ log.info("Exposing '$it' through with rSocket")}
                 .map{it.toResponse()}
     }

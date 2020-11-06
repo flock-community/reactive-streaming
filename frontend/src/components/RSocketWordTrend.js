@@ -1,23 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {RadialChart} from "react-vis";
-import {connectAndSubscribeToEndpoint, createRSocketClient} from "../util"
-import Typography from "@material-ui/core/Typography";
+import {connectAndSubscribeToEndpoint, createRSocketClient} from "../RSocketUtil"
+import WordTrend from "./WordTrend";
+import {emptyDistribution, parseNewWordTrendDistribution} from "./Util";
 
-const initialData = {
-    total: 0,
-    distribution: [{
-            angle: 0.1,
-            label: 'Flock.',
-            x: 'Flock.',
-            y: 0.1
-        }]
-};
-
-let client = undefined;
 
 const RSocketWordTrend = ({}) => {
-    const [trend, setTrend] = useState(initialData);
-
+    const [trend, setTrend] = useState(emptyDistribution);
+    const [client, setClient] = useState(undefined)
 
     useEffect(() => {
         console.log("RSocketWordTrend is here");
@@ -28,56 +17,29 @@ const RSocketWordTrend = ({}) => {
         }
     },[]);
 
-
-    const mapToRadialChartFormat = (distributionDTO) => {
-        return Object.entries(distributionDTO.wordDistribution).map(([word, value]) => {
-            return {angle: value, label: word, x:word, y:value}
-        });
-    };
-
-    const handleNewDist = distributionDTO => {
-        let mapToRadialChartFormat1 = mapToRadialChartFormat(distributionDTO);
-        console.log(mapToRadialChartFormat1);
-        setTrend({
-            total: distributionDTO.wordTotal,
-            distribution: mapToRadialChartFormat1
-        });
-    };
-
-
     const subscribeToWordDistributions = () => {
-        client = createRSocketClient();
+        const rSocketClient = createRSocketClient();
+        setClient(rSocketClient)
 
         let onNext = payload => {
-            console.log(payload.data);
-            handleNewDist(payload.data || {})
+            // console.log(payload.data);
+            let newDist = parseNewWordTrendDistribution(payload.data || {});
+            setTrend(newDist)
         };
 
         let onSubscribe = subscription => {
+            // Request for infinite distributions
             subscription.request(2147483647);
         };
 
-        connectAndSubscribeToEndpoint(client, "word-distributions", onNext, onSubscribe)
+        connectAndSubscribeToEndpoint(rSocketClient, "word-distributions", onNext, onSubscribe)
     };
 
     const cancelWordDistributions = () => {
         client.close()
     };
 
-    return (
-        <>
-        <Typography variant="h6" >out of {trend.total} words</Typography>
-        <RadialChart
-            data={trend.distribution}
-            labelsStyle={{
-                fontFamily: "Roboto",
-                fontSize: 18
-            }}
-            showLabels
-            width={300}
-            height={300}
-        />
-        </>)
+    return <WordTrend trend={trend}/>
 };
 
 export default RSocketWordTrend

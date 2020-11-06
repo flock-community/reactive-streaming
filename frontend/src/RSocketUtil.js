@@ -1,5 +1,3 @@
-import {makeStyles} from "@material-ui/core/styles";
-
 const {
     RSocketClient,
     JsonSerializer,
@@ -8,21 +6,6 @@ const {
 
 const RSocketWebSocketClient = require('rsocket-websocket-client').default;
 
-
-export const createEventSource = (url, onMessage, onError = _ => {
-}) => {
-    const eventSource = new EventSource(url);
-    eventSource.onmessage = onMessage;
-
-    eventSource.onerror = function (event) {
-        console.log("Received error");
-        console.error(event);
-        eventSource.close();
-        onError(event)
-    };
-
-    return eventSource
-};
 
 export const createRSocketClient = () => {
     // Create an instance of a client
