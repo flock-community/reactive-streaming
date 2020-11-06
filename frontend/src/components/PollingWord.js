@@ -12,10 +12,8 @@ const PollingWord = ({version="v1", alignRight}) => {
 
     const requestWords = (number) => {
         console.log("Polling most recent endpoint once more (ignoring #number argument)")
-        // fetch("http://localhost:3000/wordclouds/v1/words/most-recent")
         fetch(`http://localhost:3000/wordclouds/${version}/words/most-recent`)
             .then(it => {
-
                 console.log("Requested words", it)
                 return it.json()
             })

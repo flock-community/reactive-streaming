@@ -27,7 +27,7 @@ export const createRSocketClient = () => {
         transport: new RSocketWebSocketClient({
             // connect to middleware, or directly to producer
             url: `ws://localhost:9000/ws`
-            // url: `ws://192.168.1.54:8083/ws`
+            // url: `ws://localhost:8083/ws`
         }),
     });
 };

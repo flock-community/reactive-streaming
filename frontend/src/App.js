@@ -30,6 +30,7 @@ const App = () => {
                     <PollingWord version="v1" alignRight={true}/>
                 </Grid>
 
+                {/**/}
                 {/*<Grid item xs={12}>*/}
                 {/*    <Typography variant="h6">SSE</Typography>*/}
                 {/*    <SSEWordTrend/>*/}
@@ -45,21 +46,21 @@ const App = () => {
 
 
             <Grid container spacing={3} item xs={6} className={classes.card}>
-                {/*<Grid item xs={12}>*/}
-                {/*    <Typography variant="h6">REST</Typography>*/}
-                {/*    <PollingWord alignRight={false}/>*/}
-                {/*</Grid>*/}
-
                 <Grid item xs={12}>
-                    <Typography variant="h6">SSE</Typography>
-                    <SSEWordTrend/>
-                    <SSEWord version={"v1"} alignRight={false}/>
+                    <Typography variant="h6">REST</Typography>
+                    <PollingWord version={"v1"} alignRight={false}/>
                 </Grid>
 
                 {/*<Grid item xs={12}>*/}
+                {/*    <Typography variant="h6">SSE</Typography>*/}
+                {/*    <SSEWordTrend version={"v1"}/>*/}
+                {/*    <SSEWord version={"v2"} alignRight={false}/>*/}
+                {/*</Grid>*/}
+                {/**/}
+                {/*<Grid item xs={12}>*/}
                 {/*    <Typography variant="h6">RSocket</Typography>*/}
                 {/*    <RSocketWordTrend/>*/}
-                {/*    <RSocketWord alignRight={false}/>*/}
+                    {/*<RSocketWord alignRight={false}/>*/}
                 {/*</Grid>*/}
 
             </Grid>

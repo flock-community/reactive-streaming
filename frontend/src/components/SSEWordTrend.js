@@ -4,7 +4,7 @@ import WordTrend from "./WordTrend";
 import {emptyDistribution, parseNewWordTrendDistribution} from "./Util";
 
 
-const SSEWordTrend = () => {
+const SSEWordTrend = ({version="v1"}) => {
     const [trend, setTrend] = useState(emptyDistribution);
     const [source, setSource] = useState(undefined);
 
@@ -18,8 +18,7 @@ const SSEWordTrend = () => {
     },[]);
 
     const subscribeToWordDistributions = () => {
-        // const source = createEventSource("/wordclouds/v1/word-distributions", handleNewDistribution)
-        const source = createEventSource("/wordclouds/v2/word-distributions", handleNewDistribution)
+        const source = createEventSource(`/wordclouds/${version}/word-distributions`, handleNewDistribution)
         setSource(source)
     };
 

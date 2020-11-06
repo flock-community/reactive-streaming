@@ -18,7 +18,6 @@ const SSEWord = ({version="v2", alignRight=false}) => {
     }, []);
 
     const subscribeToWords = () => {
-        // const source = createEventSource("/wordclouds/v1/words", handleNewWord)
         const source = createEventSource(`/wordclouds/${version}/words`, handleNewWord)
         setSource(source);
     };

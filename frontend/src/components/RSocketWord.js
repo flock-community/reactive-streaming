@@ -23,13 +23,12 @@ const RSocketWord = ({alignRight}) => {
         setClient(rSocketClient)
 
         let onNext = payload => {
-            // console.log(payload.data);
             addWord(payload.data)
         };
 
         let onSubscribe = sub => {
             setSubscription(sub);
-            // sub.request(0);
+            sub.request(1);
         };
 
         connectAndSubscribeToEndpoint(rSocketClient, "words", onNext, onSubscribe)
