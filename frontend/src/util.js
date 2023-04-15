@@ -1,3 +1,4 @@
+import {makeStyles} from "@material-ui/core/styles";
 
 const {
     RSocketClient,
@@ -41,7 +42,9 @@ export const createRSocketClient = () => {
             metadataMimeType: 'message/x.rsocket.routing.v0',
         },
         transport: new RSocketWebSocketClient({
-            url: `ws://localhost:8080/ws`
+            // connect to middleware, or directly to producer
+            url: `ws://localhost:9000/ws`
+            // url: `ws://192.168.1.54:8083/ws`
         }),
     });
 };

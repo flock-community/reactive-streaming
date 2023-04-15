@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './src/App';
+import RSocketApp from './src/RSocketApp';
+import SSEApp from './src/SSEApp';
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<SSEApp/>, document.getElementById('root'));
 
